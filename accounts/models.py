@@ -5,6 +5,7 @@ from django.db import models
 class User(AbstractUser):
     bio = models.TextField(blank=True, null=True)
     is_verified = models.BooleanField(default=False)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     def __str__(self):
         return self.username

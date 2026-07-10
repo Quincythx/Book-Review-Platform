@@ -57,5 +57,5 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'bio']
+        fields = ['id', 'username', 'email', 'bio', 'avatar']
         read_only_fields = ['id']
