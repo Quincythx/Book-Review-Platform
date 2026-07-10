@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions, filters
-from .models import Review, Genre, Comment
-from .serializers import ReviewSerializer, GenreSerializer, CommentSerializer
+from rest_framework import serializers, viewsets, permissions, filters
+from .models import Review, Genre, Comment, Like, Bookmark
+from .serializers import ReviewSerializer, GenreSerializer, CommentSerializer, LikeSerializer, BookmarkSerializer
 from .permissions import IsOwnerOrReadOnly
+from django.db import IntegrityError
+from rest_framework.decorators import action
 
 # Create your views here.
 class ReviewViewSet(viewsets.ModelViewSet):
@@ -34,3 +36,29 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 
+class LikeViewSet(viewsets.ModelViewSet):
+    serializer_class = LikeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Like.objects.filter(user=self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        try:
+            serializer.save(user=self.request.user)
+        except IntegrityError:
+            raise serializers.ValidationError("You already liked this review.")
+
+
+class BookmarkViewSet(viewsets.ModelViewSet):
+    serializer_class = BookmarkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(user=self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        try:
+            serializer.save(user=self.request.user)
+        except IntegrityError:
+            raise serializers.ValidationError("You already bookmarked this review.")
