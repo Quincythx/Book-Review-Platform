@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, permissions, filters
-from .models import Review, Genre
-from .serializers import ReviewSerializer, GenreSerializer
+from .models import Review, Genre, Comment
+from .serializers import ReviewSerializer, GenreSerializer, CommentSerializer
 from .permissions import IsOwnerOrReadOnly
 
 # Create your views here.
@@ -20,3 +20,17 @@ class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all().order_by('-created_at')
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+
