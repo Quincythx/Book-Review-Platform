@@ -15,6 +15,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .serializers import PasswordResetRequestSerializer, PasswordResetConfirmSerializer
 
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserProfileSerializer
 
 User = get_user_model()
 
@@ -71,3 +73,12 @@ class PasswordResetConfirmView(APIView):
         user.set_password(serializer.validated_data['new_password'])
         user.save()
         return Response({"detail": "Password reset successful."}, status=status.HTTP_200_OK)
+    
+
+
+class ProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
