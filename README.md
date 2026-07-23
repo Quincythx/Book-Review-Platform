@@ -1,5 +1,8 @@
 # 📚 SpineIT — Backend API
 
+🔗 **Live API:** https://spineit-api.onrender.com
+🔗 **Live Docs:** https://spineit-api.onrender.com/api/docs/
+
 SpineIT is a complete, production-style backend for a book review platform, built with Django REST Framework. Users can register, verify their email, post book reviews with cover images, comment, like, and bookmark reviews — all secured with JWT authentication and documented with a live, interactive API explorer.
 
 Built as a hands-on learning project, following real-world backend development practices from the ground up: custom user models, relational database design, token-based authentication, ownership permissions, and clean API design.
